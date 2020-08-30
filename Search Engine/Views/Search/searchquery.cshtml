@@ -1,0 +1,79 @@
+﻿@model Search_Engine.Models.searchquery
+
+@{
+    Layout = null;
+}
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/searchquery.css" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</head>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Urls</title>
+</head>
+<body>
+
+    <span class="input-group">
+        <input type="text" id="inputquery" name="searchterm" class="form-control" size="50" placeholder="What do you search for .." required readonly="readonly">
+        <div class="input-group-btn">
+            <input type="submit" class="btn btn-danger" name="searchbtn" value="Search" onclick="location.href='@Url.Action("searchquery", "Search")?searchterms='+$('#inputquery').val()+'&type='+ $('#choice:checked').val()">
+        </div>
+       
+        <span class="combobox">
+            <label for="spellchecker" style="color:white"> Do you mean :</label>
+
+            <select id="spellchecker" onchange="selectedtxt(this)">
+                <option disabled selected value> -- select a @ViewBag.type -- </option>
+                @{
+                    List<String> items = ViewBag.nearest_words;
+
+                    if (items!=null)
+                    {
+                        foreach (var item in ViewBag.nearest_words)
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    }
+                   
+                }
+            </select>
+        </span>
+    </span>
+
+
+    <br /><br />
+    <div>
+
+        @foreach (var item in ViewBag.Urls)
+        {
+            <div>
+                <a href=" @item " target="_blank" style="color:whitesmoke ;font-family: arial,sans-serif;padding:10px;font-size:large;"> @item</a>
+            </div>
+            <br />
+        }
+    </div>
+</body>
+
+
+
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script>
+    function selectedtxt(ddlitem) {
+        var selvalue = ddlitem.value;
+        var seltext = ddlitem.options[ddlitem.selectedIndex].innerHTML;
+        $('#inputquery').val(seltext);
+
+    }
+</script>

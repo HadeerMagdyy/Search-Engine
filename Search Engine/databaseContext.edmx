@@ -1,0 +1,331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="web_crawlerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Crawler">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Page_content" Type="text" Nullable="false" />
+          <Property Name="Url" Type="text" Nullable="false" />
+          <Property Name="Source_Url" Type="text" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'web_crawler.dbo.dic' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="dic">
+          <Key>
+            <PropertyRef Name="term" />
+            <PropertyRef Name="doc_id" />
+          </Key>
+          <Property Name="term" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="doc_id" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'web_crawler.dbo.Dictionry' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Dictionry">
+          <Key>
+            <PropertyRef Name="Term" />
+            <PropertyRef Name="Doc_ID" />
+          </Key>
+          <Property Name="Term" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Doc_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'web_crawler.dbo.Inverted_index' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Inverted_index">
+          <Key>
+            <PropertyRef Name="Term" />
+            <PropertyRef Name="Doc_ID" />
+            <PropertyRef Name="Frequency" />
+            <PropertyRef Name="Position" />
+          </Key>
+          <Property Name="Term" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Doc_ID" Type="int" Nullable="false" />
+          <Property Name="Frequency" Type="int" Nullable="false" />
+          <Property Name="Position" Type="text" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'web_crawler.dbo.kgram_index' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="kgram_index">
+          <Key>
+            <PropertyRef Name="Term" />
+            <PropertyRef Name="gram" />
+          </Key>
+          <Property Name="Term" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="gram" Type="varchar" MaxLength="5" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'web_crawler.dbo.Soundex_Index' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Soundex_Index">
+          <Key>
+            <PropertyRef Name="phonetic_hash" />
+            <PropertyRef Name="term" />
+          </Key>
+          <Property Name="phonetic_hash" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="term" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'web_crawler.dbo.x' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="x">
+          <Key>
+            <PropertyRef Name="hash" />
+            <PropertyRef Name="term" />
+          </Key>
+          <Property Name="hash" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="term" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'web_crawler.dbo.y' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="y">
+          <Key>
+            <PropertyRef Name="Term" />
+            <PropertyRef Name="Doc_ID" />
+            <PropertyRef Name="Frequency" />
+            <PropertyRef Name="position" />
+          </Key>
+          <Property Name="Term" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Doc_ID" Type="int" Nullable="false" />
+          <Property Name="Frequency" Type="int" Nullable="false" />
+          <Property Name="position" Type="varchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="web_crawlerModelStoreContainer">
+          <EntitySet Name="Crawler" EntityType="Self.Crawler" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="dic" EntityType="Self.dic" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [dic].[term] AS [term], 
+    [dic].[doc_id] AS [doc_id]
+    FROM [dbo].[dic] AS [dic]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Dictionry" EntityType="Self.Dictionry" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Dictionry].[Term] AS [Term], 
+    [Dictionry].[Doc_ID] AS [Doc_ID]
+    FROM [dbo].[Dictionry] AS [Dictionry]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Inverted_index" EntityType="Self.Inverted_index" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Inverted_index].[Term] AS [Term], 
+    [Inverted_index].[Doc_ID] AS [Doc_ID], 
+    [Inverted_index].[Frequency] AS [Frequency], 
+    [Inverted_index].[Position] AS [Position]
+    FROM [dbo].[Inverted_index] AS [Inverted_index]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="kgram_index" EntityType="Self.kgram_index" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [kgram_index].[Term] AS [Term], 
+    [kgram_index].[gram] AS [gram]
+    FROM [dbo].[kgram_index] AS [kgram_index]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="Soundex_Index" EntityType="Self.Soundex_Index" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Soundex_Index].[phonetic_hash] AS [phonetic_hash], 
+    [Soundex_Index].[term] AS [term]
+    FROM [dbo].[Soundex_Index] AS [Soundex_Index]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="x" EntityType="Self.x" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [x].[hash] AS [hash], 
+    [x].[term] AS [term]
+    FROM [dbo].[x] AS [x]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="y" EntityType="Self.y" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [y].[Term] AS [Term], 
+    [y].[Doc_ID] AS [Doc_ID], 
+    [y].[Frequency] AS [Frequency], 
+    [y].[position] AS [position]
+    FROM [dbo].[y] AS [y]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="web_crawlerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Crawler">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Page_content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Source_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="dic">
+          <Key>
+            <PropertyRef Name="term" />
+            <PropertyRef Name="doc_id" />
+          </Key>
+          <Property Name="term" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="doc_id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Dictionry">
+          <Key>
+            <PropertyRef Name="Term" />
+            <PropertyRef Name="Doc_ID" />
+          </Key>
+          <Property Name="Term" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Doc_ID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Inverted_index">
+          <Key>
+            <PropertyRef Name="Term" />
+            <PropertyRef Name="Doc_ID" />
+            <PropertyRef Name="Frequency" />
+            <PropertyRef Name="Position" />
+          </Key>
+          <Property Name="Term" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Doc_ID" Type="Int32" Nullable="false" />
+          <Property Name="Frequency" Type="Int32" Nullable="false" />
+          <Property Name="Position" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="kgram_index">
+          <Key>
+            <PropertyRef Name="Term" />
+            <PropertyRef Name="gram" />
+          </Key>
+          <Property Name="Term" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="gram" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Soundex_Index">
+          <Key>
+            <PropertyRef Name="phonetic_hash" />
+            <PropertyRef Name="term" />
+          </Key>
+          <Property Name="phonetic_hash" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="term" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="x">
+          <Key>
+            <PropertyRef Name="hash" />
+            <PropertyRef Name="term" />
+          </Key>
+          <Property Name="hash" Type="String" MaxLength="4" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="term" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="y">
+          <Key>
+            <PropertyRef Name="Term" />
+            <PropertyRef Name="Doc_ID" />
+            <PropertyRef Name="Frequency" />
+            <PropertyRef Name="position" />
+          </Key>
+          <Property Name="Term" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Doc_ID" Type="Int32" Nullable="false" />
+          <Property Name="Frequency" Type="Int32" Nullable="false" />
+          <Property Name="position" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="web_crawlerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Crawlers" EntityType="Self.Crawler" />
+          <EntitySet Name="dics" EntityType="Self.dic" />
+          <EntitySet Name="Dictionries" EntityType="Self.Dictionry" />
+          <EntitySet Name="Inverted_index" EntityType="Self.Inverted_index" />
+          <EntitySet Name="kgram_index" EntityType="Self.kgram_index" />
+          <EntitySet Name="Soundex_Index" EntityType="Self.Soundex_Index" />
+          <EntitySet Name="x" EntityType="Self.x" />
+          <EntitySet Name="y" EntityType="Self.y" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="web_crawlerModelStoreContainer" CdmEntityContainer="web_crawlerEntities">
+          <EntitySetMapping Name="Crawlers">
+            <EntityTypeMapping TypeName="web_crawlerModel.Crawler">
+              <MappingFragment StoreEntitySet="Crawler">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Page_content" ColumnName="Page_content" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Source_Url" ColumnName="Source_Url" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="dics">
+            <EntityTypeMapping TypeName="web_crawlerModel.dic">
+              <MappingFragment StoreEntitySet="dic">
+                <ScalarProperty Name="term" ColumnName="term" />
+                <ScalarProperty Name="doc_id" ColumnName="doc_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dictionries">
+            <EntityTypeMapping TypeName="web_crawlerModel.Dictionry">
+              <MappingFragment StoreEntitySet="Dictionry">
+                <ScalarProperty Name="Term" ColumnName="Term" />
+                <ScalarProperty Name="Doc_ID" ColumnName="Doc_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Inverted_index">
+            <EntityTypeMapping TypeName="web_crawlerModel.Inverted_index">
+              <MappingFragment StoreEntitySet="Inverted_index">
+                <ScalarProperty Name="Term" ColumnName="Term" />
+                <ScalarProperty Name="Doc_ID" ColumnName="Doc_ID" />
+                <ScalarProperty Name="Frequency" ColumnName="Frequency" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="kgram_index">
+            <EntityTypeMapping TypeName="web_crawlerModel.kgram_index">
+              <MappingFragment StoreEntitySet="kgram_index">
+                <ScalarProperty Name="Term" ColumnName="Term" />
+                <ScalarProperty Name="gram" ColumnName="gram" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Soundex_Index">
+            <EntityTypeMapping TypeName="web_crawlerModel.Soundex_Index">
+              <MappingFragment StoreEntitySet="Soundex_Index">
+                <ScalarProperty Name="phonetic_hash" ColumnName="phonetic_hash" />
+                <ScalarProperty Name="term" ColumnName="term" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="x">
+            <EntityTypeMapping TypeName="web_crawlerModel.x">
+              <MappingFragment StoreEntitySet="x">
+                <ScalarProperty Name="hash" ColumnName="hash" />
+                <ScalarProperty Name="term" ColumnName="term" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="y">
+            <EntityTypeMapping TypeName="web_crawlerModel.y">
+              <MappingFragment StoreEntitySet="y">
+                <ScalarProperty Name="Term" ColumnName="Term" />
+                <ScalarProperty Name="Doc_ID" ColumnName="Doc_ID" />
+                <ScalarProperty Name="Frequency" ColumnName="Frequency" />
+                <ScalarProperty Name="position" ColumnName="position" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
